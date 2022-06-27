@@ -1,27 +1,35 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from django.middleware.csrf import get_token
+# from django.middleware.csrf import get_token
+from django.views.decorators.csrf import csrf_exempt
 # from .security_check import info_check, rb_brakeman, py_analysis_bandit, npm_njsscan, rm_repo
 from .description import descrip
 from .genuineness import genuine_test, check
+import json
 
 # Create your views here.
 
+# def csrf(request):
+#     return JsonResponse({'csrfToken': get_token(request)})
+@csrf_exempt
 def des(request):
     ret = {"status": "Error"}
     if request.method == 'POST':
         body_unicode = request.body.decode('utf-8')
+        # print(body_unicode+"\n"*10)
         # repo_url = "https://github.com/p1xxxel/vulnlauncher"
-        repo_url = json.loads(body_unicode)['url']
-        ret = descrip(repo_url)
+        # repo_url = json.loads(body_unicode)['url']
+        ret = descrip(body_unicode)
     return JsonResponse(ret, safe=False)
 
+@csrf_exempt
 def genuine(request):
     ret = {"status": "Error"}
     if request.method == 'POST':
         body_unicode = request.body.decode('utf-8')
         # repo_url = "https://github.com/p1xxxel/vulnlauncher"
-        repo_url = json.loads(body_unicode)['url']
+        print(body_unicode)
+        repo_url = json.loads(body_unicode)['data']
         repo_data = genuine_test(repo_url)
         ret = check(repo_url, repo_data)
     return JsonResponse(ret, safe=False)

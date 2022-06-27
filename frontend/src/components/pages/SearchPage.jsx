@@ -11,7 +11,7 @@ function SearchPage() {
 	const [searched, updateSearched] = useState(false);
 	const [Repo, updateRepo] = useState("");
 	async function onClick(val){
-		const response = await axios('http://echo.jsontest.com/Repository_Name/"p1xxxel_vulnlauncher"/Author/"p1xxxel"/Description/"Launch vulnhub machines through a web interface"/Stars/1/Watchers/1/')
+		const response = await axios.post('http://127.0.0.1:8000/api/description', val)
 		console.log(response.data);
 		updateRepo(response.data);
 		updateSearched(true);
