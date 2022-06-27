@@ -11,7 +11,7 @@ function SearchPage() {
 	const [searched, updateSearched] = useState(false);
 	const [Repo, updateRepo] = useState("");
 	async function onClick(val){
-		const response = await axios.post('http://127.0.0.1:8000/api/description', val)
+		const response = await axios.post('/api/description', val)
 		console.log(response.data);
 		updateRepo(response.data);
 		updateSearched(true);
