@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.middleware.csrf import get_token
-from .security_check import info_check, rb_brakeman, py_analysis_bandit, npm_njsscan, rm_repo
+# from .security_check import info_check, rb_brakeman, py_analysis_bandit, npm_njsscan, rm_repo
 from .description import descrip
 from .genuineness import genuine_test, check
 
