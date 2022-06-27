@@ -1,7 +1,7 @@
 from github import Github
 import json
 
-def descrip(github_url):
+def get_description(github_url):
     g = Github()
     # github_url = "https://github.com/p1xxxel/vulnlauncher"
     name_repo = github_url.split("/",3)[3]
