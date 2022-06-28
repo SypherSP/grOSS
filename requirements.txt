@@ -3,3 +3,5 @@ Django==4.0.5
 djangorestframework==3.13.1
 pytz==2022.1
 sqlparse==0.4.2
+PyGithub===1.55
+sh===1.14.2
