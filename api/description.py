@@ -16,6 +16,7 @@ def get_description(github_url):
     repo_commits = repo.get_commits().totalCount
 
     out = {
+        "RepoURL": github_url,
         "Repository_Name":name_repo,
         "Author":repo_owner,
         "Description":description,

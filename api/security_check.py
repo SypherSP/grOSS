@@ -61,7 +61,6 @@ def rb_brakeman(repo_url):
     path = repo[1]
     try:
         subprocess.run(["brakeman",
-                        "" + path + "",
                         "--force",
                         "-o",
                         tmp + "/report_brakeman.json"],
@@ -86,7 +85,6 @@ def rb_brakeman(repo_url):
                 res_dict["code"] = result["code"]
                 res_dict["description"] = result["message"]
                 ret += [res_dict]
-                break
 
     except (FileNotFoundError, JSONDecodeError):
         return json.dumps(['Called Process Error'])
@@ -142,7 +140,6 @@ def npm_njsscan(repo_url):
 
     try:
         subprocess.run(["njsscan",
-                        "" + path + "",
                         "--json",
                         "-o",
                         tmp + "/report_njsscan"
@@ -170,7 +167,6 @@ def npm_njsscan(repo_url):
                 ret_dict["code"] = json_data[k]["files"][0]["match_string"]
                 ret_dict["description"] = json_data[k]["metadata"]["description"]
                 ret += [ret_dict]
-                break
             shutil.rmtree(tmp, ignore_errors=True)
             return ret
 
@@ -180,9 +176,3 @@ def npm_njsscan(repo_url):
 def rm_repo(repo_url):
     repo = urlparse(repo_url).path[1::].split('/')
     rm('-rf', repo[1])
-
-#print(info_check("https://github.com/prayutsu/cflockout", "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"))
-#node_source = "/home/p1xel/Documents/nss_test"
-#print(rb_brakeman("https://github.com/p1xxxel/vulnlauncher"))
-#analysis = py_analysis_bandit("/home/p1xel/Documents/nss_test")
-#print(analysis)

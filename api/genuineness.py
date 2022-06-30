@@ -113,7 +113,7 @@ def repo_compare(original_data, curr_repo_data, repo_url_print):
         NumberOfIssues = generic_compare(original_data[8], curr_repo_data[8])
         Percent = (str)(DateWhenTheRepositoryWasCreated*5 + DateWhenTheUserJoined*5 + NumberOfForks*10 + NumberOfStars*10 + NumberOfWatchers*10 + NumberOfIssues*10 + NumberOfContributions*10 + Followers*10 + NumberOfCommits*30)+"%" 
         out = {
-            "Repo Link":repo_url_print,
+            "Repo_Link":repo_url_print,
             "Followers":Followers,
             "Number of Contributions":NumberOfContributions,
             "Date When the User Joined":DateWhenTheUserJoined,

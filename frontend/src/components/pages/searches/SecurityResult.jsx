@@ -9,7 +9,7 @@ import Paper from "@mui/material/Paper";
 import VulnResults from "../../VulnResults";
 import { CodeBlock, dracula } from "react-code-blocks";
 
-function SecurityResult() {
+function SecurityResult(props) {
   const [infoScan, setInfoScan] = useState([])
   const [njsScan, setNjsScan] = useState([])
   const [pyScan, setPyScan] = useState([])
@@ -17,30 +17,11 @@ function SecurityResult() {
 
 
   const showLineNumbers = false;
-  const fetchData = () => {
-
-    fetch("http://localhost:8000/api/repo-sec",{
-        method: 'POST',
-    headers: {
-    'Content-Type': 'application/json'
-    },
-        body: JSON.stringify({'url': 'https://github.com/p1xxxel/vulnlauncher'})
-    }).then(response => {
-        return response.json();
-    }).then(data => {
-        setInfoScan(data.info_scan)
-        setNjsScan(data.njs_scan)
-        setPyScan(data.py_scan)
-        setRbScan(data.rb_scan)
-    })
-  }
-
-
-
   useEffect(() => {
-
-    fetchData()
-
+    setInfoScan(props.data.info_scan)
+    setNjsScan(props.data.njs_scan)
+    setPyScan(props.data.py_scan)
+    setRbScan(props.data.rb_scan)
   }, [])
 
 

@@ -6,6 +6,7 @@ from .security_check import info_check, rb_brakeman, py_analysis_bandit, npm_njs
 from .description import get_description
 from .genuineness import genuine_test, check
 import json
+from os import chdir
 
 # Create your views here.
 
@@ -25,6 +26,7 @@ def repo_sec(request):
         py_scan = py_analysis_bandit(repo_url)
         njs_scan = npm_njsscan(repo_url)
         ret = {"info_scan": info_scan, "rb_scan": rb_scan, "py_scan": py_scan, "njs_scan": njs_scan}
+        chdir("../")
         rm_repo(repo_url)
 #        ret = {"info_scan": ""}
     return JsonResponse(ret)
