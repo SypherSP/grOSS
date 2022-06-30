@@ -13,7 +13,7 @@ function SearchPage() {
 	async function onClick(val){
 		const response = await axios.post('/api/description', {'url': val})
 		console.log(response.data);
-		updateRepo(response.data);
+		updateRepo(JSON.parse(response.data));
 		updateSearched(true);
 	}
 	return (
