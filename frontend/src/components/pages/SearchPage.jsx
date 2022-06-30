@@ -3,7 +3,6 @@ import SearchBar from "../SearchBar";
 import "./SearchPage.css";
 import SearchResult from "./searches/SearchResult";
 import axios from "axios";
-// import { Repo } from "../VulnResults";
 
 
 
