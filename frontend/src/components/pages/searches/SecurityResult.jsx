@@ -56,6 +56,7 @@ function SecurityResult(props) {
         </div>
 
       )}
+
       {rbScan.length > 0 && (
           <div id="rb_scan">
           <h2> Static Ruby code analysis </h2>
@@ -66,14 +67,16 @@ function SecurityResult(props) {
                     <li><b>{res.heading}</b></li>
                     <li>Confidence : {res.confidence}</li>
                     <li>File name : {res.filename}</li>
-                    <li>Line number : {res.line_no}</li>
-                    <li>Code : {res.code}</li>
-                    <CodeBlock
-                        text={res.code}
-                        language='ruby'
-                        showLineNumbers={showLineNumbers}
-                        theme={dracula}
-                    />
+                    <li>Line number : {res.line_no}
+                    {!!res.code &&
+                        <CodeBlock
+                            text={res.code}
+                            language='ruby'
+                            showLineNumbers={showLineNumbers}
+                            theme={dracula}
+                        />
+                    }
+                    </li>
                     <li>Description : {res.description}</li>
                 </div>
             ))}
@@ -82,6 +85,7 @@ function SecurityResult(props) {
           </div>
 
       )}
+
       {pyScan.length > 0 && (
           <div id="py_scan">
           <h2> Static Python code analysis </h2>

@@ -111,7 +111,7 @@ def repo_compare(original_data, curr_repo_data, repo_url_print):
         NumberOfWatchers = generic_compare(original_data[6], curr_repo_data[6])
         NumberOfCommits = generic_compare(original_data[7], curr_repo_data[7])
         NumberOfIssues = generic_compare(original_data[8], curr_repo_data[8])
-        Percent = (str)(DateWhenTheRepositoryWasCreated*5 + DateWhenTheUserJoined*5 + NumberOfForks*10 + NumberOfStars*10 + NumberOfWatchers*10 + NumberOfIssues*10 + NumberOfContributions*10 + Followers*10 + NumberOfCommits*30)+"%" 
+        Percent = (str)(DateWhenTheRepositoryWasCreated*5 + DateWhenTheUserJoined*5 + NumberOfForks*10 + NumberOfStars*10 + NumberOfWatchers*10 + NumberOfIssues*10 + NumberOfContributions*10 + Followers*10 + NumberOfCommits*30)+"%"
         out = {
             "Repo_Link":repo_url_print,
             "Followers":Followers,
@@ -132,7 +132,7 @@ def repo_compare(original_data, curr_repo_data, repo_url_print):
         DateWhenTheRepositoryWasCreated = generic_compare(curr_repo_data[3], original_data[3])
         NumberOfCommits = generic_compare(original_data[7], curr_repo_data[7])
         NumberOfIssues = generic_compare(original_data[8], curr_repo_data[8])
-        Percent = (str)(DateWhenTheRepositoryWasCreated*10  + NumberOfForks*20 + NumberOfStars*10 + NumberOfWatchers*20 + NumberOfIssues*10 + NumberOfCommits*30)+"%" 
+        Percent = (str)(DateWhenTheRepositoryWasCreated*10  + NumberOfForks*20 + NumberOfStars*10 + NumberOfWatchers*20 + NumberOfIssues*10 + NumberOfCommits*30)+"%"
         out = {
             "Repo Link":repo_url_print,
             "Date when the Repository was Created":DateWhenTheRepositoryWasCreated,
@@ -143,8 +143,7 @@ def repo_compare(original_data, curr_repo_data, repo_url_print):
             "Number of Issues":NumberOfIssues,
             "Genuineness":Percent
         }
-    real_output = json.dumps(out)
-    return real_output 
+    return out
 
 def check(github_url, original_data):
     g = Github(gh_token)
@@ -152,18 +151,16 @@ def check(github_url, original_data):
     headers = {'Authorization': 'token %s' % (gh_token)}
     name_repo = github_url.split("/",4)[4]
     repo_owner = github_url.split("/",4)[3]
-    i = 0
     cmp = dict()
+    ret = []
     for repo in g.search_repositories(name_repo):
         if((repo.full_name.split("/",1)[1] == name_repo) & (repo.full_name.split("/",1)[0] != repo_owner)):
             curr_repo_data = []
             curr_repo_data += get_repo_data(repo, graphql_url, headers)
             repo_url_print = "https://github.com/"+repo.full_name.split("/",1)[0]+"/"+name_repo
-            curr = {
-                i: repo_compare(original_data, curr_repo_data, repo_url_print)
-            }
-            cmp.update(curr)
-            i+=1
+            curr = [repo_compare(original_data, curr_repo_data, repo_url_print)]
+            ret += curr
+    cmp["result"] = ret
     if (len(cmp) == 0):
         cmp = {
             "Genuineness":100

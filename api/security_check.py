@@ -15,7 +15,6 @@ def vuln_check(url, gh_token):
     g = Github(gh_token)
     g = Github(login_or_token=gh_token)
     repo = g.get_repo(urlparse(url).path[1::])
-    print(repo)
     contents  = repo.get_contents("")
     check_modules = []
     while contents:
@@ -58,9 +57,10 @@ def info_check(repo_url):
 def rb_brakeman(repo_url):
     repo = urlparse(repo_url).path[1::].split('/')
     os.makedirs(tmp, exist_ok=True)
-    path = repo[1]
+    path = "."
     try:
         subprocess.run(["brakeman",
+                        "" + path + "",
                         "--force",
                         "-o",
                         tmp + "/report_brakeman.json"],
@@ -70,7 +70,7 @@ def rb_brakeman(repo_url):
         if e.errno == errno.ENOENT:
             raise OSError('Brakeman not installed')
     except:
-        return json.dumps(['Called Process Error'])
+        return json.dumps([])
 
     try:
         ret = []
@@ -95,7 +95,7 @@ def rb_brakeman(repo_url):
 def py_analysis_bandit(repo_url):
     repo = urlparse(repo_url).path[1::].split('/')
     os.makedirs(tmp, exist_ok=True)
-    path = repo[1]
+    path = "."
 
     try:
         subprocess.run(["bandit",
@@ -136,10 +136,11 @@ def py_analysis_bandit(repo_url):
 def npm_njsscan(repo_url):
     repo = urlparse(repo_url).path[1::].split('/')
     os.makedirs(tmp, exist_ok=True)
-    path = repo[1]
+    path = "."
 
     try:
         subprocess.run(["njsscan",
+                        "" + path + "",
                         "--json",
                         "-o",
                         tmp + "/report_njsscan"
@@ -150,7 +151,7 @@ def npm_njsscan(repo_url):
         if e.errno == errno.ENOENT:
             raise OSError('Njsscan not installed')
     except:
-        return json.dumps(['Called Process Error'])
+        return json.dumps([])
 
     try:
         with open(tmp + '/report_njsscan', 'r') as f:
@@ -171,7 +172,7 @@ def npm_njsscan(repo_url):
             return ret
 
     except (FileNotFoundError, JSONDecodeError):
-        return json.dumps(['Called Process Error'])
+        return json.dumps([])
 
 def rm_repo(repo_url):
     repo = urlparse(repo_url).path[1::].split('/')

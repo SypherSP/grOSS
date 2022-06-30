@@ -7,6 +7,7 @@ from .description import get_description
 from .genuineness import genuine_test, check
 import json
 from os import chdir
+from os import getcwd
 
 # Create your views here.
 
