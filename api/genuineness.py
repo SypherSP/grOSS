@@ -4,6 +4,8 @@ import json
 import requests
 import datetime
 
+gh_token = "INSERT TOKEN HERE"
+
 def send_req_graphql(graphql_url, headers, json_data):
     r = requests.post(url=graphql_url, json=json_data, headers=headers)
     return r
@@ -25,14 +27,21 @@ def get_user_contributions(username, graphql_url, headers):
             "query" : 'query { user(login: "%s") { email createdAt contributionsCollection(from: "%s-12-31T23:59:59Z", to: "%s-12-31T23:59:59Z") { contributionCalendar { totalContributions } } } }' %(username, i, i+1)
         }
         r = send_req_graphql(graphql_url, headers, json_data)
-        total_contibutions += (int)(r.text.split(':',9)[9].split('}',1)[0])
-        date_joined = r.text.split('"',18)[11]
+        try:
+            total_contibutions += (int)(r.text.split(':',9)[9].split('}',1)[0])
+        except:
+            break
+        try:
+            date_joined = r.text.split('"',18)[11]
+        except:
+            break
+    # print(date_joined)
     user_data_list.append(total_contibutions)
     user_data_list.append(date_joined)
     return user_data_list
 
 def get_user_data(username, graphql_url, headers):
-    g = Github()
+    g = Github(gh_token)
     user_data_list = []
     cur_user = g.get_user(username)
     user_followers = cur_user.followers
@@ -73,6 +82,7 @@ def generic_compare(org, mod):
         return 0
 
 def str_to_date(s):
+    # print(s)
     year = (int)(s.split('-',2)[0])
     month = (int)(s.split('-',2)[1])
     day = (int)(s.split('-',2)[2].split('T',1)[0])
@@ -87,73 +97,92 @@ def joining_date_compare(org, mod):
     date_mod = str_to_date(mod)
     return generic_compare(date_mod, date_org)
 
-def repo_compare(original_data, curr_repo_data):
+def repo_compare(original_data, curr_repo_data, repo_url_print):
     # 1 if orginal url github repo is better else 0 for the repo with which our repo is being compared
-    Followers = generic_compare(original_data[0], curr_repo_data[0])
-    NumberOfContributions = generic_compare(original_data[1], curr_repo_data[1])
-    DateWhenTheUserJoined = joining_date_compare(original_data[2], curr_repo_data[2])
-    DateWhenTheRepositoryWasCreated = generic_compare(curr_repo_data[3], original_data[3])
-    NumberOfForks = generic_compare(original_data[4], curr_repo_data[4])
-    NumberOfStars = generic_compare(original_data[5], curr_repo_data[5])
-    NumberOfWatchers = generic_compare(original_data[6], curr_repo_data[6])
-    NumberOfCommits = generic_compare(original_data[7], curr_repo_data[7])
-    NumberOfIssues = generic_compare(original_data[8], curr_repo_data[8])
-    Percent = (str)(DateWhenTheRepositoryWasCreated*5 + DateWhenTheUserJoined*5 + NumberOfForks*10 + NumberOfStars*10 + NumberOfWatchers*10 + NumberOfIssues*10 + NumberOfContributions*10 + Followers*10 + NumberOfCommits*30)+"%" 
-    out = {
-        "Followers":Followers,
-        "Number of Contributions":NumberOfContributions,
-        "Date When the User Joined":DateWhenTheUserJoined,
-        "Date when the Repository was Created":DateWhenTheRepositoryWasCreated,
-        "Number of Forks":NumberOfForks,
-        "Number of Stars":NumberOfStars,
-        "Number of Watchers":NumberOfWatchers,
-        "Number of Commits":NumberOfCommits,
-        "Number of Issues":NumberOfIssues,
-        "Genuineness":Percent
-    }
+    # print(len(original_data[2]))
+    # print(len(curr_repo_data[2]))
+    if(len(original_data[2]) != 0 and len(curr_repo_data[2]) != 0):
+        Followers = generic_compare(original_data[0], curr_repo_data[0])
+        NumberOfContributions = generic_compare(original_data[1], curr_repo_data[1])
+        DateWhenTheUserJoined = joining_date_compare(original_data[2], curr_repo_data[2])
+        DateWhenTheRepositoryWasCreated = generic_compare(curr_repo_data[3], original_data[3])
+        NumberOfForks = generic_compare(original_data[4], curr_repo_data[4])
+        NumberOfStars = generic_compare(original_data[5], curr_repo_data[5])
+        NumberOfWatchers = generic_compare(original_data[6], curr_repo_data[6])
+        NumberOfCommits = generic_compare(original_data[7], curr_repo_data[7])
+        NumberOfIssues = generic_compare(original_data[8], curr_repo_data[8])
+        Percent = (str)(DateWhenTheRepositoryWasCreated*5 + DateWhenTheUserJoined*5 + NumberOfForks*10 + NumberOfStars*10 + NumberOfWatchers*10 + NumberOfIssues*10 + NumberOfContributions*10 + Followers*10 + NumberOfCommits*30)+"%" 
+        out = {
+            "Repo Link":repo_url_print,
+            "Followers":Followers,
+            "Number of Contributions":NumberOfContributions,
+            "Date When the User Joined":DateWhenTheUserJoined,
+            "Date when the Repository was Created":DateWhenTheRepositoryWasCreated,
+            "Number of Forks":NumberOfForks,
+            "Number of Stars":NumberOfStars,
+            "Number of Watchers":NumberOfWatchers,
+            "Number of Commits":NumberOfCommits,
+            "Number of Issues":NumberOfIssues,
+            "Genuineness":Percent
+        }
+    else:
+        NumberOfForks = generic_compare(original_data[4], curr_repo_data[4])
+        NumberOfStars = generic_compare(original_data[5], curr_repo_data[5])
+        NumberOfWatchers = generic_compare(original_data[6], curr_repo_data[6])
+        DateWhenTheRepositoryWasCreated = generic_compare(curr_repo_data[3], original_data[3])
+        NumberOfCommits = generic_compare(original_data[7], curr_repo_data[7])
+        NumberOfIssues = generic_compare(original_data[8], curr_repo_data[8])
+        Percent = (str)(DateWhenTheRepositoryWasCreated*10  + NumberOfForks*20 + NumberOfStars*10 + NumberOfWatchers*20 + NumberOfIssues*10 + NumberOfCommits*30)+"%" 
+        out = {
+            "Repo Link":repo_url_print,
+            "Date when the Repository was Created":DateWhenTheRepositoryWasCreated,
+            "Number of Forks":NumberOfForks,
+            "Number of Stars":NumberOfStars,
+            "Number of Watchers":NumberOfWatchers,
+            "Number of Commits":NumberOfCommits,
+            "Number of Issues":NumberOfIssues,
+            "Genuineness":Percent
+        }
     real_output = json.dumps(out)
     return real_output 
 
 def check(github_url, original_data):
-    g = Github()
+    g = Github(gh_token)
     graphql_url = 'https://api.github.com/graphql'
-    api_token = "INSERT TOKEN HERE"
-    headers = {'Authorization': 'token %s' % (api_token)}
+    headers = {'Authorization': 'token %s' % (gh_token)}
     name_repo = github_url.split("/",4)[4]
     repo_owner = github_url.split("/",4)[3]
-    i = 1
-    cmp = {
-        0:""
-    }
-    cmp = json.dumps(cmp)
+    i = 0
+    cmp = dict()
     for repo in g.search_repositories(name_repo):
         if((repo.full_name.split("/",1)[1] == name_repo) & (repo.full_name.split("/",1)[0] != repo_owner)):
             curr_repo_data = []
             curr_repo_data += get_repo_data(repo, graphql_url, headers)
-            # print(curr_repo_data)
-            out = json.loads(cmp)
+            repo_url_print = "https://github.com/"+repo.full_name.split("/",1)[0]+"/"+name_repo
             curr = {
-                i: repo_compare(original_data, curr_repo_data)
+                i: repo_compare(original_data, curr_repo_data, repo_url_print)
             }
-            out.update(curr)
+            cmp.update(curr)
             i+=1
-            cmp = json.dumps(out)
-            # return cmp
+    if (len(cmp) == 0):
+        cmp = {
+            "Genuineness":100
+        }
     return cmp
 
 def genuine_test(github_url):
-    g = Github()
+    g = Github(gh_token)
     # github_url = "https://github.com/p1xxxel/vulnlauncher"
     name_repo = github_url.split("/",4)[4]
     repo_owner = github_url.split("/",4)[3]
     original_data = []
     graphql_url = 'https://api.github.com/graphql'
-    api_token = "INSERT TOKEN HERE"
-    headers = {'Authorization': 'token %s' % (api_token)}
+    headers = {'Authorization': 'token %s' % (gh_token)}
     url_repo = g.get_repo(repo_owner+'/'+name_repo)
     original_data += get_repo_data(url_repo, graphql_url, headers)
     return original_data
 
-# github_url = "https://github.com/p1xxxel/vulnlauncher"
+# github_url = "https://github.com/r3z3l/freesound"
+
 # original_data = genuine_test(github_url)
 # print(check(github_url, original_data))

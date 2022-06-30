@@ -1,5 +1,5 @@
 frontend/node_modules/
-frontend/build
+frontend/build/
 api/__pycache__/
 api/auxiliar_functions/
 api/migrations/
