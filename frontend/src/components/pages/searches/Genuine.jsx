@@ -13,7 +13,7 @@ function Genuine(props){
                     <ul>
                         {repos.map(res => (
                             <div href={res.Repo_Link}>
-                                <li>Repo Name: {res.Repo_Link}</li>
+                                <li>Repo Name: {res.Repo_Name}</li>
                                 <li>Followers: {res.Followers}</li>
                                 <li>Contributors: {res.Contributor}</li>
                                 <li>Created: {res.Created} </li>

@@ -10,28 +10,34 @@ function MainPage(props) {
 			<p>What are you waiting for?</p>
 			<div className='hero-btns'>
 				<CustomLink to='/search'>
-					<Button
-						className='btns'
-						buttonStyle='btn--outline'
-						buttonSize='btn--large'
-						onStart={props.onStart}>
+					<button
+						onClick={props.onStart}
+						className='btn btn-outline-success btn-lg'
+						style={{
+							borderStyle: "solid",
+						}}>
 						GET STARTED
-					</Button>
+					</button>
 				</CustomLink>
-				<Button
-					className='btns'
-					buttonStyle='btn--primary'
-					buttonSize='btn--large'
-					onClick={console.log("hey")}>
-					WATCH TRAILER <i className='far fa-play-circle' />
-				</Button>
+				<button
+					onClick={console.log("watch trailer")}
+					className='btn btn-success btn-lg'
+					style={{
+						borderStyle: "solid",
+					}}>
+					WATCH TRAILER
+				</button>
 			</div>
 		</div>
 	);
 }
 
 function CustomLink({ to, children, ...props }) {
-	return <Link to={to} {...props}>{children}</Link>;
+	return (
+		<Link to={to} {...props}>
+			{children}
+		</Link>
+	);
 }
 
 export default MainPage;

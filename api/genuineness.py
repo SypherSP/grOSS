@@ -3,6 +3,7 @@ from github import Github
 import json
 import requests
 import datetime
+from urllib.parse import urlparse
 
 gh_token = "INSERT TOKEN HERE"
 
@@ -101,6 +102,8 @@ def repo_compare(original_data, curr_repo_data, repo_url_print):
     # 1 if orginal url github repo is better else 0 for the repo with which our repo is being compared
     # print(len(original_data[2]))
     # print(len(curr_repo_data[2]))
+    repo_name = urlparse(repo_url_print).path[1::].split('/')
+    repo_name = repo_name[0] + '/' + repo_name[1]
     if(len(original_data[2]) != 0 and len(curr_repo_data[2]) != 0):
         Followers = generic_compare(original_data[0], curr_repo_data[0])
         NumberOfContributions = generic_compare(original_data[1], curr_repo_data[1])
@@ -114,6 +117,7 @@ def repo_compare(original_data, curr_repo_data, repo_url_print):
         Percent = (str)(DateWhenTheRepositoryWasCreated*5 + DateWhenTheUserJoined*5 + NumberOfForks*10 + NumberOfStars*10 + NumberOfWatchers*10 + NumberOfIssues*10 + NumberOfContributions*10 + Followers*10 + NumberOfCommits*30)+"%"
         out = {
             "Repo_Link":repo_url_print,
+            "Repo_Name":repo_name,
             "Followers":Followers,
             "Number of Contributions":NumberOfContributions,
             "Date When the User Joined":DateWhenTheUserJoined,

@@ -1,56 +1,78 @@
 import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import axios from "axios";
 import Genuine from "./Genuine";
 import SecurityResult from "./SecurityResult";
 
 function SearchResult(props) {
-	const url = props.repo.RepoURL
-	const [gencheck, updateGen] = useState({ condition:false, data: ""})
-	const [seccheck, updateSec] = useState({ condition: false, data: ""})
-	async function checkGenuiness(){
-		const response = await axios.post('/api/genuineness_check', {'url': url})
+	const url = props.repo.RepoURL;
+	const [gencheck, updateGen] = useState({ condition: false, data: "" });
+	const [seccheck, updateSec] = useState({ condition: false, data: "" });
+	async function checkGenuiness() {
+		const response = await axios.post("/api/genuineness_check", { url: url });
 		// const data = JSON.parse(response.data)
 		// console.log(response.data);
-		updateGen(prev => {
+		updateGen((prev) => {
 			return {
 				condition: true,
-				data: response.data
-			}
-		})
-		updateSec(prev => {
+				data: response.data,
+			};
+		});
+		updateSec((prev) => {
 			return {
 				...prev,
-				condition: false
-			}
-		})
+				condition: false,
+			};
+		});
 	}
-	async function securityResult(){
-		const response = await axios.post('/api/repo-sec', {'url': url})
+	async function securityResult() {
+		const response = await axios.post("/api/repo-sec", { url: url });
 		// const data = JSON.parse(response.data)
 		// console.log(response.data);
-		updateSec(prev => {
+		updateSec((prev) => {
 			return {
 				condition: true,
-				data: response.data
-			}
-		})
-		updateGen(prev => {
+				data: response.data,
+			};
+		});
+		updateGen((prev) => {
 			return {
 				...prev,
-				condition: false
-			}
-		})
+				condition: false,
+			};
+		});
 	}
 	return (
 		<>
-			<Card sx={{ maxWidth: 345 }}>
+			<div className='card' style={{ margin: "5%", marginTop: 56, backgroundColor: "#0d1117"}}>
+				<h5 className='card-header'>{props.repo.Repository_Name}</h5>
+				<div className='card-body'>
+					<h5 className='card-title'>{props.repo.Author}</h5>
+					<p className='card-text'>{props.repo.Description}</p>
+					<div class='d-grid gap-2 d-md-flex justify-content-md-end'>
+						<button
+							onClick={checkGenuiness}
+							className='btn btn-outline-success'
+							style={{
+								borderStyle: "solid",
+								borderRightWidth: 1,
+								borderTopWidth: 1,
+							}}>
+							Genuiness
+						</button>
+						<button
+							onClick={securityResult}
+							className='btn btn-outline-danger'
+							style={{
+								borderStyle: "solid",
+								borderLeftWidth: 1,
+								borderTopWidth: 1,
+							}}>
+							Security Result
+						</button>
+					</div>
+				</div>
+			</div>
+			{/* <Card sx={{ maxWidth: 345 }}>
 				<CardMedia
 					component='img'
 					alt='green iguana'
@@ -69,10 +91,14 @@ function SearchResult(props) {
 					</Typography>
 				</CardContent>
 				<CardActions>
-					<Button onClick={checkGenuiness} size='small'>Genuiness</Button>
-					<Button onClick={securityResult} size='small'>Security Result</Button>
+					<Button onClick={checkGenuiness} size='small'>
+						Genuiness
+					</Button>
+					<Button onClick={securityResult} size='small'>
+						Security Result
+					</Button>
 				</CardActions>
-			</Card>
+			</Card> */}
 			{gencheck.condition && <Genuine data={gencheck.data} />}
 			{seccheck.condition && <SecurityResult data={seccheck.data} />}
 		</>

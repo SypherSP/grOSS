@@ -11,7 +11,7 @@ function SearchBar(props) {
         props.onClick(searchURL);
     }
   return (
-    <div className="search__container">
+    <div className="container-fluid" style={{marginTop: 56,backgroundColor: "#010409",height: "100vh"}}>
     <form onSubmit={handleSubmit}>
     <input 
         onChange={(event) => {

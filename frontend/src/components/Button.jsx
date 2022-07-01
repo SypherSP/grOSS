@@ -17,6 +17,7 @@ function Button(props){
   }
 
   return (
+    <>
     <button
       className={`btn ${checkButtonStyle} ${checkButtonSize}`}
       onClick={handleClick}
@@ -24,6 +25,7 @@ function Button(props){
     >
       {props.children}
     </button>
+  </>
 );
 }
 

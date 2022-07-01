@@ -9,7 +9,7 @@ function Home(){
         updateStarted(true);
     }
     return (
-        <div>
+        <div style={{backgroundColor: "#010409"}}>
             {started ? <SearchPage/> : <MainPage onStart={gettingStarted} /> }
         </div>
     );

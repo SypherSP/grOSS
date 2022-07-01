@@ -17,7 +17,7 @@ function App() {
 	);
 }
 export const NotFound = () => {
-	return <div className="Notfound">This is a 404 page</div>;
+	return <div className="Notfound" style={{backgroundColor: "#010409"}}>This is a 404 page</div>;
 };
 
 export default App;
