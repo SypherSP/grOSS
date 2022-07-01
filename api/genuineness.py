@@ -4,7 +4,7 @@ import json
 import requests
 import datetime
 
-gh_token = "INSERT TOKEN HERE"
+gh_token = "TOKEN_HERE"
 
 def send_req_graphql(graphql_url, headers, json_data):
     r = requests.post(url=graphql_url, json=json_data, headers=headers)
@@ -150,6 +150,8 @@ def check(github_url, original_data):
     graphql_url = 'https://api.github.com/graphql'
     headers = {'Authorization': 'token %s' % (gh_token)}
     name_repo = github_url.split("/",4)[4]
+    if(name_repo[len(name_repo)-1] == '/'):
+        name_repo = name_repo[:len(name_repo)-1]
     repo_owner = github_url.split("/",4)[3]
     cmp = dict()
     ret = []
@@ -171,6 +173,8 @@ def genuine_test(github_url):
     g = Github(gh_token)
     # github_url = "https://github.com/p1xxxel/vulnlauncher"
     name_repo = github_url.split("/",4)[4]
+    if(name_repo[len(name_repo)-1] == '/'):
+        name_repo = name_repo[:len(name_repo)-1]
     repo_owner = github_url.split("/",4)[3]
     original_data = []
     graphql_url = 'https://api.github.com/graphql'
