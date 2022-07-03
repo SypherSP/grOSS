@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 function MainPage(props) {
 	return (
 		<div className='hero-container'>
-			<h1>Vulnfinder</h1>
+			<h1>SecureHub</h1>
 			<p>What are you waiting for?</p>
 			<div className='hero-btns'>
 				<CustomLink to='/search'>
