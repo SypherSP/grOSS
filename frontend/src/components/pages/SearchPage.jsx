@@ -18,11 +18,11 @@ function SearchPage() {
 		updateSearched(2);
 	}
 	return (
-		<div className="container-fluid" style={{marginTop: 56,backgroundColor: "#010409",height: "100vh"}}>
+		<>
 			{searched===0 && <SearchBar onClick={onClick}/>}
 			{searched===1 && <PlaceHolder />}
 			{searched===2&& <SearchResult repo={Repo} />}
-		</div>
+		</>
 	);
 }
 

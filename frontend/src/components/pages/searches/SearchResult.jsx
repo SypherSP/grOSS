@@ -2,48 +2,38 @@ import React, { useState } from "react";
 import axios from "axios";
 import Genuine from "./Genuine";
 import SecurityResult from "./SecurityResult";
+import PlaceHolder from "../../PlaceHolder";
 
 function SearchResult(props) {
 	const url = props.repo.RepoURL;
-	const [gencheck, updateGen] = useState({ condition: false, data: "" });
-	const [seccheck, updateSec] = useState({ condition: false, data: "" });
+	const [check, setCheck] = useState(0);
+	const [gencheck, updateGen] = useState({data: "" });
+	const [seccheck, updateSec] = useState({data: "" });
 	async function checkGenuiness() {
+		setCheck(0)
+		setCheck(1)
 		const response = await axios.post("/api/genuineness_check", { url: url });
-		// const data = JSON.parse(response.data)
-		// console.log(response.data);
-		updateGen((prev) => {
+		updateGen(() => {
 			return {
-				condition: true,
 				data: response.data,
 			};
 		});
-		updateSec((prev) => {
-			return {
-				...prev,
-				condition: false,
-			};
-		});
+		setCheck(2)
 	}
 	async function securityResult() {
+		setCheck(0)
+		setCheck(1)
 		const response = await axios.post("/api/repo-sec", { url: url });
-		// const data = JSON.parse(response.data)
-		// console.log(response.data);
 		updateSec((prev) => {
 			return {
-				condition: true,
 				data: response.data,
 			};
 		});
-		updateGen((prev) => {
-			return {
-				...prev,
-				condition: false,
-			};
-		});
+		setCheck(3)
 	}
 	return (
 		<>
-			<div className='card' style={{ margin: "5%", marginTop: 56, backgroundColor: "#0d1117"}}>
+			<div className='card' style={{ margin: "5%", marginTop: "5em", backgroundColor: "#0d1117", border: "1px #30363d solid"}}>
 				<h5 className='card-header'>{props.repo.Repository_Name}</h5>
 				<div className='card-body'>
 					<h5 className='card-title'>{props.repo.Author}</h5>
@@ -51,56 +41,26 @@ function SearchResult(props) {
 					<div class='d-grid gap-2 d-md-flex justify-content-md-end'>
 						<button
 							onClick={checkGenuiness}
-							className='btn btn-outline-success'
+							className='btn btn-success'
 							style={{
-								borderStyle: "solid",
-								borderRightWidth: 1,
-								borderTopWidth: 1,
+								borderStyle: "solid"
 							}}>
 							Genuiness
 						</button>
 						<button
 							onClick={securityResult}
-							className='btn btn-outline-danger'
+							className='btn btn-success'
 							style={{
-								borderStyle: "solid",
-								borderLeftWidth: 1,
-								borderTopWidth: 1,
+								borderStyle: "solid"
 							}}>
 							Security Result
 						</button>
 					</div>
 				</div>
 			</div>
-			{/* <Card sx={{ maxWidth: 345 }}>
-				<CardMedia
-					component='img'
-					alt='green iguana'
-					height='140'
-					image='/static/images/cards/contemplative-reptile.jpg'
-				/>
-				<CardContent>
-					<Typography gutterBottom variant='h5' component='div'>
-						{props.repo.Repository_Name}
-					</Typography>
-					<Typography variant='h5' component='div'>
-						{props.repo.Author}
-					</Typography>
-					<Typography variant='body2' color='text.secondary'>
-						{props.repo.Description}
-					</Typography>
-				</CardContent>
-				<CardActions>
-					<Button onClick={checkGenuiness} size='small'>
-						Genuiness
-					</Button>
-					<Button onClick={securityResult} size='small'>
-						Security Result
-					</Button>
-				</CardActions>
-			</Card> */}
-			{gencheck.condition && <Genuine data={gencheck.data} />}
-			{seccheck.condition && <SecurityResult data={seccheck.data} />}
+			{check===1 && <PlaceHolder/>}
+			{check===2 && <Genuine data={gencheck.data} />}
+			{check===3 && <SecurityResult data={seccheck.data} />}
 		</>
 	);
 }
