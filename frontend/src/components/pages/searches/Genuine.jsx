@@ -17,22 +17,20 @@ function Genuine(props) {
 					}}
 					id='genuineness'>
 					<h2 className='card-header'>Matched Repos</h2>
-					<ul>
 						{repos.map((res) => (
-							<div href={res.Repo_Link}>
-								<li>Repo Name: {res.Repo_Name}</li>
-								<li>Followers: {res.Followers}</li>
-								<li>Contributors: {res.Contributor}</li>
-								<li>Created: {res.Created} </li>
-								<li>Forks: {res.Forks} </li>
-								<li>Stars: {res.Stars} </li>
-								<li>Watchers: {res.Watchers}</li>
-								<li>Commits: {res.Commits} </li>
-								<li>Issues: {res.Issues} </li>
-								<li>Genuineness: {res.Genuineness} </li>
+							<div>
+								<p>Repo Name: <a href={res.repo_link} >{res.repo_name}</a></p>
+								<p>Followers: {res.followers}</p>
+								<p>Contributors: {res.contributor}</p>
+								<p>Created: {res.created} </p>
+								<p>Forks: {res.forks} </p>
+								<p>Stars: {res.stars} </p>
+								<p>Watchers: {res.watchers}</p>
+								<p>Commits: {res.commits} </p>
+								<p>Issues: {res.issues} </p>
+								<p>Genuineness: {res.Genuineness} </p>
 							</div>
 						))}
-					</ul>
 				</div>
 			)}
 		</>
