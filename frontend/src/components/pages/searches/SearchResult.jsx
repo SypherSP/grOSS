@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Genuine from "./Genuine";
 import SecurityResult from "./SecurityResult";
-import PlaceHolder from "../../PlaceHolder";
+import { ResultPlaceHolder } from "../../PlaceHolder";
 
 function SearchResult(props) {
 	const url = props.repo.RepoURL;
@@ -58,7 +58,7 @@ function SearchResult(props) {
 					</div>
 				</div>
 			</div>
-			{check===1 && <PlaceHolder/>}
+			{check===1 && <ResultPlaceHolder/>}
 			{check===2 && <Genuine data={gencheck.data} />}
 			{check===3 && <SecurityResult data={seccheck.data} />}
 		</>
