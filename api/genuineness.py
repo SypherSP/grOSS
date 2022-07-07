@@ -118,15 +118,13 @@ def repo_compare(original_data, curr_repo_data, repo_url_print):
         out = {
             "repo_link":repo_url_print,
             "repo_name":repo_name,
-            "followers":Followers,
-            "contributions":NumberOfContributions,
-            "joined":DateWhenTheUserJoined,
-            "created":DateWhenTheRepositoryWasCreated,
-            "forks":NumberOfForks,
-            "stars":NumberOfStars,
-            "watchers":NumberOfWatchers,
-            "commits":NumberOfCommits,
-            "issues":NumberOfIssues,
+            "followers":curr_repo_data[0],
+            "contributions":curr_repo_data[1],
+            "forks":curr_repo_data[4],
+            "stars":curr_repo_data[5],
+            "watchers":curr_repo_data[6],
+            "commits":curr_repo_data[7],
+            "issues":curr_repo_data[8],
             "Genuineness":Percent
         }
     else:
@@ -159,6 +157,19 @@ def check(github_url, original_data):
     repo_owner = github_url.split("/",4)[3]
     cmp = dict()
     ret = []
+    curr = [{
+            "repo_link":github_url,
+            "repo_name":name_repo,
+            "followers":original_data[0],
+            "contributions":original_data[1],
+            "forks":original_data[4],
+            "stars":original_data[5],
+            "watchers":original_data[6],
+            "commits":original_data[7],
+            "issues":original_data[8],
+            "Genuineness":""
+        }]
+    ret += curr
     for repo in g.search_repositories(name_repo):
         if((repo.full_name.split("/",1)[1] == name_repo) & (repo.full_name.split("/",1)[0] != repo_owner)):
             curr_repo_data = []
