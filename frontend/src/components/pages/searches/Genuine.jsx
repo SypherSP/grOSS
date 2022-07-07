@@ -1,17 +1,50 @@
 import React, { useEffect, useState } from "react";
+import {Line} from 'react-chartjs-2';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
+
+
 function Genuine(props) {
   const [repos, setRepos] = useState([]);
   useEffect(() => {
     setRepos(props.data.result);
   }, []);
   console.log(repos);
+  const data = {
+  labels: [],
+  datasets: [
+  ]
+  };
+  var notRequired = ["Genuineness", "repo_link", "repo_name", "contributions"];
+  for (const key in repos[0]) {
+      if (notRequired.indexOf(key) === -1) {
+          data.labels.push(key);
+      }
+  }
+  for (const repo of repos) {
+      var dataset = {};
+      dataset.label = repo.repo_name;
+      dataset.data = [repo['followers'], repo['forks'], repo['stars'], repo['watchers'], repo['commits'], repo['issues']];
+      console.log(repos.indexOf(repo) === 0);
+      var r = Math.floor(Math.random() * 256);
+      var g = Math.floor(Math.random() * 256);
+      var b = Math.floor(Math.random() * 256);
+      if (repos.indexOf(repo) === 0){
+        dataset.backgroundColor = "rgba("+r+","+g+","+b+","+"0.2)";
+      }
+      dataset.fill = true;
+      dataset.borderColor = "rgba("+r+","+g+","+b+","+"1)";
+      data.datasets.push(dataset);
+  }
+  console.log(data);
+
   return (
     <>
       <h1 style={{marginLeft: "5%"}}>Matched Repos</h1>
       {repos.length === 1 && <p>No Repo Found</p>}
       {repos.length > 1 && (
         <div className="row" style={{margin: "2% 5% 2% 5%"}}>
-          {repos.map((res,idx) => 
+          {repos.map((res,idx) =>
           {
             if (idx!==0) {
           return (
@@ -165,9 +198,12 @@ function Genuine(props) {
               </div>
             </div>
           )}})}
-              
+
         </div>
       )}
+      <div>
+      <Line data={data} />
+      </div>
     </>
   );
 }
