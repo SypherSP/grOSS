@@ -7,7 +7,7 @@ function Navbar() {
 			<nav className='navbar navbar-expand-md navbar-dark fixed-top' style={{backgroundColor: "#161b22"}}>
 				<div className='container'>
 					<Link to='/' className='navbar-brand'>
-						SecureHub
+						grOSS
 						<i className='fab fa-typo3' />
 					</Link>
 					<button

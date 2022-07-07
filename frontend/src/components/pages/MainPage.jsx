@@ -4,9 +4,12 @@ import Button from "../Button";
 import { Link } from "react-router-dom";
 
 function MainPage(props) {
+	function handleClick(event) {
+		console.log("watch trailer");
+	}
 	return (
 		<div className='hero-container'>
-			<h1>SecureHub</h1>
+			<h1>grOSS</h1>
 			<p>What are you waiting for?</p>
 			<div className='hero-btns'>
 				<CustomLink to='/search'>
@@ -20,7 +23,7 @@ function MainPage(props) {
 					</button>
 				</CustomLink>
 				<button
-					onClick={console.log("watch trailer")}
+					onClick={handleClick}
 					className='btn btn-success btn-lg'
 					style={{
 						borderStyle: "solid",
