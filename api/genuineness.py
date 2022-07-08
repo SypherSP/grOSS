@@ -114,10 +114,12 @@ def repo_compare(original_data, curr_repo_data, repo_url_print):
         NumberOfWatchers = generic_compare(original_data[6], curr_repo_data[6])
         NumberOfCommits = generic_compare(original_data[7], curr_repo_data[7])
         NumberOfIssues = generic_compare(original_data[8], curr_repo_data[8])
+        Created = (str)(curr_repo_data[3].month)+'-'+(str)(curr_repo_data[3].day)+'-'+(str)(curr_repo_data[3].year)
         Percent = (str)(DateWhenTheRepositoryWasCreated*5 + DateWhenTheUserJoined*5 + NumberOfForks*10 + NumberOfStars*10 + NumberOfWatchers*10 + NumberOfIssues*10 + NumberOfContributions*10 + Followers*10 + NumberOfCommits*30)+"%"
         out = {
             "repo_link":repo_url_print,
             "repo_name":repo_name,
+            "created":Created,
             "followers":curr_repo_data[0],
             "contributions":curr_repo_data[1],
             "forks":curr_repo_data[4],
@@ -159,7 +161,7 @@ def check(github_url, original_data):
     ret = []
     curr = [{
             "repo_link":github_url,
-            "repo_name":name_repo,
+            "repo_name":repo_owner+'/'+name_repo,
             "followers":original_data[0],
             "contributions":original_data[1],
             "forks":original_data[4],
