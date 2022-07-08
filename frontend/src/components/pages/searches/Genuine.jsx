@@ -205,7 +205,7 @@ function Genuine(props) {
 
         </div>
       )}
-      <div>
+      <div className="container-lg" style={{margin: "5%"}}>
       <Line data={data} />
       </div>
     </>
