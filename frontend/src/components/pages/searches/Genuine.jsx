@@ -25,15 +25,16 @@ function Genuine(props) {
       var dataset = {};
       dataset.label = repo.repo_name;
       dataset.data = [repo['followers'], repo['forks'], repo['stars'], repo['watchers'], repo['commits'], repo['issues']];
-      console.log(repos.indexOf(repo) === 0);
-      var r = Math.floor(Math.random() * 256);
-      var g = Math.floor(Math.random() * 256);
-      var b = Math.floor(Math.random() * 256);
+      const red = Math.floor((1 + Math.random()) * 256/2);
+      const green = Math.floor((1 + Math.random()) * 256/2);
+      const blue = Math.floor((1 + Math.random()) * 256/2);
       if (repos.indexOf(repo) === 0){
-        dataset.backgroundColor = "rgba("+r+","+g+","+b+","+"0.2)";
+        dataset.backgroundColor = "rgb(" + red + ", " + green + ", " + blue + ", 0.2" + ")";
+        dataset.borderColor = "rgb(" + red + ", " + green + ", " + blue + ", 1" + ")";
+      }else {
+        dataset.borderColor = "rgb(" + red + ", " + green + ", " + blue + ", 1" + ")";
       }
       dataset.fill = true;
-      dataset.borderColor = "rgba("+r+","+g+","+b+","+"1)";
       data.datasets.push(dataset);
   }
   console.log(data);
