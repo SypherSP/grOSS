@@ -18,6 +18,11 @@ video {
     object-fit: contain;
   }
   
+  .hero-container img {
+    width: 6rem;
+    height: 6rem;
+  }
+  
   .hero-container > h1 {
     color: #fff;
     font-size: 100px;

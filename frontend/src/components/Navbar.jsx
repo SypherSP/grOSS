@@ -1,4 +1,5 @@
 import React from 'react';
+import logo from './logo.png'
 import { Link } from 'react-router-dom';
 
 function Navbar() {
@@ -7,7 +8,8 @@ function Navbar() {
 			<nav className='navbar navbar-expand-md navbar-dark fixed-top' style={{backgroundColor: "#161b22"}}>
 				<div className='container'>
 					<Link to='/' className='navbar-brand'>
-						grOSS
+					<img src={logo} alt="" width="30" height="30"/>
+						{" "}grOSS
 						<i className='fab fa-typo3' />
 					</Link>
 					<button
