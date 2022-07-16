@@ -46,9 +46,19 @@ function SearchBar(props) {
           className="col-2 p-3 mx-auto" style={{backgroundColor: "#42414d", width: "12%", borderRadius: 2}}>
             <img className="img-fluid" src="https://avatars.githubusercontent.com/u/65240717?s=48&v=4" />
           </div>
-          <div className="col-2 p-3 mx-auto" style={{backgroundColor: "#42414d", width: "12%", borderRadius: 2}}>
+          <div onClick={(event) => {
+            const val = "https://github.com/Ultimatesicko/vulnlauncher"
+            updateURL(val)
+          }}
+          className="col-2 p-3 mx-auto" style={{backgroundColor: "#42414d", width: "12%", borderRadius: 2}}>
+            <img className="img-fluid" src="https://avatars.githubusercontent.com/u/75926824?v=4" />
           </div>
-          <div className="col-2 p-3 mx-auto" style={{backgroundColor: "#42414d", width: "12%", borderRadius: 2}}>
+          <div onClick={(event) => {
+            const val = "https://github.com/r3z3l/Quiz-app"
+            updateURL(val)
+          }}
+          className="col-2 p-3 mx-auto" style={{backgroundColor: "#42414d", width: "12%", borderRadius: 2}}>
+            <img className="img-fluid" src="https://avatars.githubusercontent.com/u/65240717?s=48&v=4" />
           </div>
         </div>
       </div>
