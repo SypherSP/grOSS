@@ -11,12 +11,16 @@ from json import JSONDecodeError
 from .auxiliar_functions.globals import tmp
 from sh import rm
 
-def vuln_check(url, gh_token):
+gh_token = "TOKEN_HERE"
+
+def vuln_check(url):
+    if shutil.which("searchsploit") == None:
+        return []
     g = Github(gh_token)
-    g = Github(login_or_token=gh_token)
     repo = g.get_repo(urlparse(url).path[1::])
     contents  = repo.get_contents("")
     check_modules = []
+    res = []
     while contents:
         file_content = contents.pop(0)
         if file_content.type == "dir":
@@ -32,14 +36,22 @@ def vuln_check(url, gh_token):
                 for module in dependencies:
                     check_modules += [[module, dependencies[module].replace("^","")]]
 
-    #print(check_modules)
-
     for module in check_modules:
-        params = ['searchsploit', module[0], module[1]]
+        params = ['searchsploit', module[0], module[1], "--json"]
         proc = subprocess.Popen(params, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         output, error = proc.communicate()
         status = proc.wait()
-        print(output)
+        output = json.loads(output)
+        res_exp = output["RESULTS_EXPLOIT"]
+        for exp in res_exp:
+            exp["url"] = f"https://exploit-db.com/exploits/{exp['EDB-ID']}"
+            exp.pop("Date")
+            exp.pop("Type")
+            exp.pop("Platform")
+            exp.pop("Path")
+        if len(res_exp) != 0:
+            res.append(res_exp)
+    return res
 
 def info_check(repo_url):
     gl = GittyLeak({'link': repo_url})
@@ -167,6 +179,52 @@ def npm_njsscan(repo_url):
                 ret_dict["line_no"] = json_data[k]["files"][0]["match_lines"][0]
                 ret_dict["code"] = json_data[k]["files"][0]["match_string"]
                 ret_dict["description"] = json_data[k]["metadata"]["description"]
+                ret += [ret_dict]
+            shutil.rmtree(tmp, ignore_errors=True)
+            return ret
+
+    except (FileNotFoundError, JSONDecodeError):
+        return json.dumps([])
+
+def android_mobsfscan(repo_url):
+    repo = urlparse(repo_url).path[1::].split('/')
+    os.makedirs(tmp, exist_ok=True)
+    path = "."
+
+    try:
+        subprocess.run(["mobsfscan",
+                        "" + path + "",
+                        "--json",
+                        "-o",
+                        tmp + "/report_mobsfscan"
+                        ],
+                       stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT,
+                       shell=False, check=False)
+    except OSError as e:
+        if e.errno == errno.ENOENT:
+            raise OSError('Mobsfscan not installed')
+    except:
+        return json.dumps([])
+
+    try:
+        with open(tmp + '/report_mobsfscan', 'r') as f:
+            json_data = json.load(f)
+            ret = []
+            json_data = json_data["results"]
+            for k in json_data:
+                ret_dict = dict()
+                ret_dict["heading"] = k.replace("_", " ").title()
+                ret_dict["severity"] = json_data[k]["metadata"]["severity"]
+                ret_dict["cwe"] = json_data[k]["metadata"]["cwe"]
+                try:
+                    ret_dict["filename"] = json_data[k]["files"][0]["file_path"]
+                    ret_dict["line_no"] = json_data[k]["files"][0]["match_lines"][0]
+                    ret_dict["code"] = json_data[k]["files"][0]["match_string"]
+                except:
+                    pass
+                ret_dict["description"] = json_data[k]["metadata"]["description"]
+                ret_dict["owasp_modile"] = json_data[k]["metadata"]["owasp-mobile"]
+                ret_dict["reference"] = json_data[k]["metadata"]["reference"]
                 ret += [ret_dict]
             shutil.rmtree(tmp, ignore_errors=True)
             return ret

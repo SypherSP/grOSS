@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 # from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt
-from .security_check import info_check, rb_brakeman, py_analysis_bandit, npm_njsscan, rm_repo
+from .security_check import vuln_check, info_check, rb_brakeman, py_analysis_bandit, npm_njsscan, android_mobsfscan, rm_repo
 from .description import get_description
 from .genuineness import genuine_test, check
 import json
@@ -22,11 +22,13 @@ def repo_sec(request):
         # repo_url = "https://github.com/p1xxxel/vulnlauncher"
         repo_url = json.loads(body_unicode)['url']
         rm_repo(repo_url)
+        vuln_scan = vuln_check(repo_url)
         info_scan = info_check(repo_url)
         rb_scan = rb_brakeman(repo_url)
         py_scan = py_analysis_bandit(repo_url)
         njs_scan = npm_njsscan(repo_url)
-        ret = {"info_scan": info_scan, "rb_scan": rb_scan, "py_scan": py_scan, "njs_scan": njs_scan}
+        android_scan = android_mobsfscan(repo_url)
+        ret = {"vuln_scan": vuln_scan, "info_scan": info_scan, "rb_scan": rb_scan, "py_scan": py_scan, "njs_scan": njs_scan, "android_scan": android_scan}
         chdir("../")
         rm_repo(repo_url)
 #        ret = {"info_scan": ""}
