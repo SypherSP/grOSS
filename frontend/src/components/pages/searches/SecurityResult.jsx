@@ -46,7 +46,7 @@ function SecurityResult(props) {
                 aria-controls="vuln_scan1"
                 style={{ backgroundColor: "#30363d", color: "#86b7fe" }}
               >
-                Vulnerable assesment
+                Vulnerable version detection
               </button>
             </h2>
           </div>
