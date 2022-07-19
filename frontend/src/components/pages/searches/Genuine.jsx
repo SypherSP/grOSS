@@ -8,7 +8,6 @@ function Genuine(props) {
   useEffect(() => {
     setRepos(props.data.result);
   }, []);
-  console.log(repos);
   const data = {
     labels: [],
     datasets: [],
@@ -45,7 +44,6 @@ function Genuine(props) {
     dataset.fill = true;
     data.datasets.push(dataset);
   }
-  console.log(data);
 
   return (
     <>

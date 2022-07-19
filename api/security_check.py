@@ -45,10 +45,12 @@ def vuln_check(url):
         res_exp = output["RESULTS_EXPLOIT"]
         for exp in res_exp:
             exp["url"] = f"https://exploit-db.com/exploits/{exp['EDB-ID']}"
+            exp["EDB_ID"] = exp["EDB-ID"]
             exp.pop("Date")
             exp.pop("Type")
             exp.pop("Platform")
             exp.pop("Path")
+            exp.pop("EDB-ID")
         if len(res_exp) != 0:
             res.append(res_exp)
     return res

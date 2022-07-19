@@ -5,7 +5,6 @@ function SearchBar(props) {
   const [searchURL, updateURL] = useState("");
   function handleSubmit(event) {
     event.preventDefault();
-    console.log("searching");
     props.onClick(searchURL);
   }
   return (
