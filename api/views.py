@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 # from django.middleware.csrf import get_token
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponseNotFound
 from .security_check import vuln_check, info_check, rb_brakeman, py_analysis_bandit, npm_njsscan, android_mobsfscan, rm_repo
 from .description import get_description
 from .genuineness import genuine_test, check
@@ -48,6 +49,9 @@ def description(request):
         # repo_url = "https://github.com/p1xxxel/vulnlauncher"
         repo_url = json.loads(body_unicode)['url']
         ret = get_description(repo_url)
+        print(ret)
+        if(ret == "error"):
+            return HttpResponseNotFound("404")
     return JsonResponse(ret, safe=False)
 
 @csrf_exempt

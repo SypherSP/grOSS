@@ -30,5 +30,5 @@ def get_description(github_url):
         }
         return json.dumps(out)
     except:
-        return json.dumps({'Error':'URL NOT FOUND'})
+        return "error"
 
