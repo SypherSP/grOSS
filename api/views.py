@@ -6,21 +6,17 @@ from django.http import HttpResponseNotFound
 from .security_check import vuln_check, info_check, rb_brakeman, py_analysis_bandit, npm_njsscan, android_mobsfscan, rm_repo
 from .description import get_description
 from .genuineness import genuine_test, check
+from .extract_repo import get_pypi_link, get_npm_link
 import json
 from os import chdir
 from os import getcwd
-
-# Create your views here.
-
-# def csrf(request):
-#     return JsonResponse({'csrfToken': get_token(request)})
+from urllib.parse import urlparse
 
 @csrf_exempt
 def repo_sec(request):
     ret = {"status": "Error"}
     if request.method == 'POST':
         body_unicode = request.body.decode('utf-8')
-        # repo_url = "https://github.com/p1xxxel/vulnlauncher"
         repo_url = json.loads(body_unicode)['url']
         rm_repo(repo_url)
         vuln_scan = vuln_check(repo_url)
@@ -32,9 +28,7 @@ def repo_sec(request):
         ret = {"vuln_scan": vuln_scan, "info_scan": info_scan, "rb_scan": rb_scan, "py_scan": py_scan, "njs_scan": njs_scan, "android_scan": android_scan}
         chdir("../")
         rm_repo(repo_url)
-#        ret = {"info_scan": ""}
     return JsonResponse(ret)
-#    return JsonResponse(info_check("https://github.com/p1xxxel/vulnlauncher", "abc"))
 
 @csrf_exempt
 def repo_gen(request):
@@ -45,9 +39,14 @@ def description(request):
     ret = {"status": "Error"}
     if request.method == 'POST':
         body_unicode = request.body.decode('utf-8')
-        # print(body_unicode+"\n"*10)
-        # repo_url = "https://github.com/p1xxxel/vulnlauncher"
         repo_url = json.loads(body_unicode)['url']
+        url = urlparse(repo_url)
+        subdomain = url.hostname
+        print(subdomain)
+        if subdomain == "pypi.org":
+            repo_url = get_pypi_link(repo_url)
+        elif subdomain in ["www.npmjs.com", "npmjs.com"]:
+            repo_url = get_npm_link(repo_url)
         ret = get_description(repo_url)
         print(ret)
         if(ret == "error"):

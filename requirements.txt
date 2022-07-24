@@ -1,8 +1,10 @@
 asgiref==3.5.2
 attrs==21.4.0
 bandit==1.7.4
+beautifulsoup4==4.11.1
 boltons==21.0.0
 bracex==2.3.post1
+bs4==0.0.1
 certifi==2022.6.15
 cffi==1.15.0
 charset-normalizer==2.0.12
@@ -23,6 +25,7 @@ jschema-to-python==1.2.3
 jsonpickle==2.2.0
 jsonschema==4.6.0
 libsast==1.5.2
+lxml==4.9.1
 mobsfscan==0.1.1
 njsscan==0.3.1
 packaging==21.3
@@ -45,6 +48,7 @@ scandir==1.10.0
 semgrep==0.104.0
 sh==1.14.2
 smmap==5.0.0
+soupsieve==2.3.2.post1
 sqlparse==0.4.2
 stevedore==3.5.0
 tabulate==0.8.10
